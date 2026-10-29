@@ -220,11 +220,12 @@
     .topbar { position: fixed; left: 0; top: 0; height: 2px; width: 0; background: var(--wine); z-index: 30; }
     @media (min-width: 1380px) { .topbar { display: none; } }
 
+    .facts b { font-weight: 500; color: var(--ink); }
     /* icon menu */
     .explore { border-top: 1px solid var(--line); background: var(--tint); }
     .explore h2 { margin-top: 8px; }
     .explore .note { margin-top: 8px; color: var(--soft); font-size: .92rem; }
-    .tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-top: 30px; }
+    .tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 30px; }
     .tile { position: relative; display: flex; flex-direction: column; gap: 4px; min-height: 168px; padding: 22px 20px 20px; background: var(--bg); border: 1px solid var(--line); border-radius: 12px; text-decoration: none; color: var(--ink); transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s, border-color .3s; }
     .tile:hover { transform: translateY(-4px); box-shadow: 0 22px 36px -26px rgba(107,22,34,.45); border-color: rgba(107,22,34,.35); }
     .tile:active { transform: scale(.98); }
@@ -235,6 +236,17 @@
     .tile:hover .arr { background: var(--wine); color: #fff; border-color: var(--wine); transform: rotate(-45deg); }
     .explore .hl { margin-top: 26px; }
     @media (max-width: 860px) { .tiles { grid-template-columns: 1fr 1fr; gap: 10px; } .tile { min-height: 150px; padding: 18px 16px 16px; } .tile .t { font-size: 1.35rem; } .tile .arr { top: 14px; right: 14px; width: 26px; height: 26px; } }
+    .feat-main { display: grid; grid-template-columns: 1.5fr 1fr; gap: 30px; align-items: center; margin-top: 26px; padding: 30px 32px; background: var(--bg); border: 1px solid var(--line); border-radius: 12px; }
+    .feat-main .meta { margin-top: 12px; font-size: .8rem; color: var(--soft); }
+    .feat-main h3 { margin-top: 4px; font: 400 1.9rem/1.08 var(--serif); }
+    .feat-main p:not(.meta) { margin-top: 10px; color: var(--soft); font-size: .96rem; }
+    .fm-more { margin-top: 16px; font: 500 .92rem/1 var(--sans); color: var(--wine); background: none; border: 0; padding: 0; cursor: pointer; }
+    .fm-more:hover { text-decoration: underline; }
+    .fm-nums { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+    .fm-nums div { display: flex; align-items: baseline; gap: 12px; padding: 14px 18px; background: var(--tint); }
+    .fm-nums dt { font: 400 1.9rem/1 var(--serif); color: var(--wine); min-width: 92px; }
+    .fm-nums dd { font-size: .86rem; color: var(--soft); }
+    @media (max-width: 760px) { .feat-main { grid-template-columns: 1fr; gap: 20px; padding: 22px 18px; } .feat-main h3 { font-size: 1.6rem; } }
     /* panel overlay */
     .ov { position: fixed; inset: 0; z-index: 40; background: var(--bg); overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; visibility: hidden; transform: translateY(24px); opacity: 0; transition: opacity .35s, transform .45s cubic-bezier(.2,.8,.2,1), visibility 0s .45s; }
     .ov.open { visibility: visible; transform: none; opacity: 1; transition: opacity .35s, transform .45s cubic-bezier(.2,.8,.2,1); }
@@ -269,7 +281,7 @@
         <h1>Fazile Brahimi</h1>
         <p class="role">Data Science &amp; Data Engineering</p>
         <p class="lead">I build predictive models and the data pipelines that feed them. Currently working on Kosovo's national government Data Hub.</p>
-        <div class="facts"><span>Pristina, Kosovo · CET</span><span>MSc Business Analytics, CEU Vienna</span><span>Professional Scrum Master I</span></div>
+        <div class="facts"><span><b>Now:</b> Senior IT Officer, ASHI (Kosovo)</span><span>MSc Business Analytics (Merit), CEU Vienna</span><span>Pristina · CET</span><span>Scrum Master (PSM I)</span></div>
         <div class="cta">
           <a class="btn" href="mailto:fazilebrahimi1@gmail.com">Get in touch</a>
           <a class="btn line" href="https://github.com/fazilebrahimi1" target="_blank" rel="noopener">GitHub</a>
@@ -292,16 +304,18 @@
         <a class="tile" href="#experience" data-panel="experience"><svg class="ico" viewBox="0 0 44 36" aria-hidden="true"><rect x="5" y="11" width="34" height="21" rx="2"/><path d="M16 11V7h12v4"/><path d="M5 20h34"/><path d="M20 20v3h4v-3"/></svg><span class="t">Experience</span><span class="s">7 roles</span><span class="arr" aria-hidden="true">→</span></a>
         <a class="tile" href="#awards" data-panel="awards"><svg class="ico" viewBox="0 0 44 36" aria-hidden="true"><path d="M14 5h16v9a8 8 0 0 1-16 0z"/><path d="M14 8H8c0 5 3 8 7 8M30 8h6c0 5-3 8-7 8"/><path d="M22 22v5M16 32h12M18 32l1-5h6l1 5"/></svg><span class="t">Awards</span><span class="s">2 first places</span><span class="arr" aria-hidden="true">→</span></a>
         <a class="tile" href="#education" data-panel="education"><svg class="ico" viewBox="0 0 44 36" aria-hidden="true"><path d="M2 14l20-8 20 8-20 8z"/><path d="M10 17.5V25c0 2.5 5.5 5 12 5s12-2.5 12-5v-7.5"/><path d="M38 15.5V26"/></svg><span class="t">Education</span><span class="s">MSc, BSc, Erasmus+, summer school</span><span class="arr" aria-hidden="true">→</span></a>
-        <a class="tile" href="#skills" data-panel="skills"><svg class="ico" viewBox="0 0 44 36" aria-hidden="true"><path d="M14 10l-9 8 9 8M30 10l9 8-9 8"/><path d="M25 6l-6 24"/></svg><span class="t">Skills</span><span class="s">Tools and methods</span><span class="arr" aria-hidden="true">→</span></a>
-        <a class="tile" href="#certs" data-panel="certs"><svg class="ico" viewBox="0 0 44 36" aria-hidden="true"><rect x="5" y="4" width="34" height="23" rx="2"/><path d="M11 11h18M11 16h11"/><circle cx="31" cy="24" r="5"/><path d="M28 28l-1 6 4-2 4 2-1-6"/></svg><span class="t">Certificates</span><span class="s">PSM I and more</span><span class="arr" aria-hidden="true">→</span></a>
-        <a class="tile" href="#contact" data-panel="contact"><svg class="ico" viewBox="0 0 44 36" aria-hidden="true"><rect x="4" y="7" width="36" height="23" rx="2"/><path d="M4 9l18 12L40 9"/></svg><span class="t">Contact</span><span class="s">Let's talk</span><span class="arr" aria-hidden="true">→</span></a>
+        <a class="tile" href="#skills" data-panel="skills"><svg class="ico" viewBox="0 0 44 36" aria-hidden="true"><path d="M14 10l-9 8 9 8M30 10l9 8-9 8"/><path d="M25 6l-6 24"/></svg><span class="t">Skills &amp; certificates</span><span class="s">Tools, methods, PSM I</span><span class="arr" aria-hidden="true">→</span></a>
       </div>
-      <div class="hl">
-        <div><b data-to="0.797" data-dec="3">0.797</b><span>AUC, payment-failure model for a European transit operator</span></div>
-        <div><b data-to="27.6" data-dec="1" data-suf="%">27.6%</b><span>of uncollected revenue recovered by the decision framework</span></div>
-        <div><b data-to="390000" data-dec="0" data-suf=" t">390,000 t</b><span>potential annual reduction modelled for the City of Vienna</span></div>
-        <div><b>2× 1st place</b><span>Vienna FoodPrint hackathon and NovoFin fintech pitch</span></div>
-      </div>
+      <article class="feat-main">
+        <div>
+          <span class="tag" style="margin-left:0">Featured project</span>
+          <p class="meta">MSc Capstone · Client: Rebel Solutions Group · Grade A</p>
+          <h3>Predicting revenue loss in public transport</h3>
+          <p>End-to-end ML system for a European transit operator: a leakage-safe feature pipeline, a real-time gate model and a nightly XGBoost model, turned into a decision framework.</p>
+          <button type="button" class="fm-more" data-goto="capstone">Read more →</button>
+        </div>
+        <dl class="fm-nums"><div><dt>0.797</dt><dd>AUC</dd></div><div><dt>27.6%</dt><dd>revenue recovered</dd></div><div><dt>42</dt><dd>features</dd></div></dl>
+      </article>
     </div>
   </section>
 
@@ -328,7 +342,7 @@
       <div><p class="label">Work</p><h2>Projects</h2><p class="note">Five areas. Tap one to see the projects.</p></div>
       <div>
       <div class="featured"><span class="tag flag" style="margin-left:0">Featured project</span>
-            <div class="proj">
+            <div class="proj" id="capstone">
               <svg class="ico" viewBox="0 0 44 36" aria-hidden="true"><path d="M4 30h36"/><path d="M7 30V22h6v8M17 30V16h6v14M27 30V9h6v21"/><path d="M5 18L36 4"/><path d="M31 4h5v5"/></svg>
               <p class="meta">Apr – Jun 2026 · MSc Capstone · Client: Rebel Solutions Group · <span class="star">Grade A</span></p>
               <h4>Uncovering and predicting revenue loss in public transport</h4>
@@ -600,7 +614,7 @@
   </section>
   <section id="skills">
     <div class="wrap head">
-      <div><p class="label">Skills</p><h2>Skills</h2></div>
+      <div><p class="label">Skills</p><h2>Skills &amp; certificates</h2></div>
       <div>
         <dl class="rows">
           <div><dt>Data engineering</dt><dd>SQL, ETL &amp; feature pipelines, DataHub, metadata &amp; data governance, AWS, Snowflake</dd></div>
@@ -608,13 +622,7 @@
           <div><dt>Tools &amp; ways of working</dt><dd>Python, R, Stata, Power BI, Git · Scrum (PSM I)</dd></div>
           <div><dt>Languages</dt><dd>Albanian (native), English (C1), German (B2)</dd></div>
         </dl>
-      </div>
-    </div>
-  </section>
-  <section class="tint" id="certs">
-    <div class="wrap head">
-      <div><p class="label">Certificates</p><h2>Certifications</h2></div>
-      <div>
+        <h3 class="sub">Certifications</h3>
         <ul class="certs">
           <li class="main"><span>Professional Scrum Master I (PSM I) — Scrum.org</span><span>2024</span></li>
           <li><span>ERP Business Solutions/SAP — World Bank and the Ministry of Economy</span><span>2024</span></li>
@@ -762,7 +770,7 @@
   /* icon menu: each card opens its section in a full-screen panel */
   (() => {
     const ov = document.getElementById("ov"), body = document.getElementById("ov-body"), title = document.getElementById("ov-t"), vault = document.getElementById("vault");
-    const names = { about: "About", work: "Projects", experience: "Experience", awards: "Awards", education: "Education", skills: "Skills", certs: "Certificates" };
+    const names = { about: "About", work: "Projects", experience: "Experience", awards: "Awards", education: "Education", skills: "Skills & certificates", };
     let cur = null, opener = null;
     function put(id) {
       if (cur) vault.appendChild(cur);
@@ -790,7 +798,7 @@
     addEventListener("popstate", e => { const p = e.state && e.state.panel; if (p) { put(p); if (!ov.classList.contains("open")) open(p, false); } else close(true); });
     addEventListener("keydown", e => { if (e.key === "Escape" && ov.classList.contains("open") && !document.getElementById("deck").classList.contains("open")) document.getElementById("ov-back").click(); });
     // winner cards: "Details" jumps to the full project write-up
-    window.__gotoProject = id => { const el = document.getElementById(id), sec = el.closest("section"); if (cur !== sec) { put(sec.id); history.replaceState({ panel: sec.id }, "", "#" + sec.id); } el.closest("details").open = true; setTimeout(() => el.scrollIntoView({ behavior: "smooth", block: "start" }), 60); };
+    window.__gotoProject = id => { const el = document.getElementById(id), sec = el.closest("section"); if (!ov.classList.contains("open")) open(sec.id); else if (cur !== sec) { put(sec.id); history.replaceState({ panel: sec.id }, "", "#" + sec.id); } const d = el.closest("details"); if (d) d.open = true; setTimeout(() => el.scrollIntoView({ behavior: "smooth", block: "start" }), 60); };
     const h = location.hash.slice(1); if (names[h]) { history.replaceState({ panel: h }, "", "#" + h); open(h, false); }
   })();
 
