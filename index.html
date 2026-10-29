@@ -165,6 +165,17 @@
     .featured .flag { display: inline-block; margin-bottom: 14px; }
     .featured h4 { font-size: 1.7rem; }
     .featured ul { margin-top: 8px; padding-left: 18px; } .featured li { margin-top: 6px; font-size: .98rem; } .featured li::marker { color: var(--wine); }
+    .proj { scroll-margin-top: 84px; }
+    .wins { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: -12px 0 28px; }
+    .win { background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 22px 22px 20px; display: flex; flex-direction: column; }
+    .win .meta { font-size: .78rem; color: var(--soft); margin-top: 10px; }
+    .win h4 { margin-top: 4px; font: 400 1.3rem/1.15 var(--serif); }
+    .win p { margin-top: 8px; font-size: .92rem; color: var(--soft); }
+    .win .m { margin-top: 10px; font-size: .9rem; font-weight: 500; color: var(--wine); }
+    .win .acts { display: flex; flex-wrap: wrap; gap: 16px; margin-top: auto; padding-top: 14px; }
+    .win .acts a, .win .acts button { font: 500 .88rem/1 var(--sans); color: var(--wine); text-decoration: none; background: none; border: 0; padding: 0; cursor: pointer; }
+    .win .acts a:hover, .win .acts button:hover { text-decoration: underline; }
+    @media (max-width: 700px) { .wins { grid-template-columns: 1fr; } }
     .acc-label { font-size: .8rem; color: var(--soft); margin-bottom: 6px; }
     @media (max-width: 600px) { .featured { padding: 22px 18px; } }
     /* phone menu: all links, scrollable */
@@ -281,6 +292,24 @@
                 <li>Delivered a technical report, business and academic presentations, and a reproducible notebook.</li>
               </ul>
             </div>
+      </div>
+      <div class="wins">
+        <article class="win">
+          <span class="tag" style="margin-left:0;align-self:flex-start">Hackathon · Winner</span>
+          <p class="meta">CEU Hackathon · Organised by SDG Watch Austria · For the City of Vienna</p>
+          <h4>Vienna FoodPrint</h4>
+          <p>App prototype and policy frameworks to cut Vienna's material footprint through the food system.</p>
+          <p class="m">1st place · ~390,000 t potential annual reduction</p>
+          <div class="acts"><a href="https://fazilebrahimi1.github.io/vienna-foodprint-app/" target="_blank" rel="noopener">View the app →</a><button type="button" data-goto="foodprint">Details</button></div>
+        </article>
+        <article class="win">
+          <span class="tag" style="margin-left:0;align-self:flex-start">Pitch competition · Winner</span>
+          <p class="meta">Jun 2024 · OTH Regensburg · Digital Finance</p>
+          <h4>NovoFin: fintech for emerging markets</h4>
+          <p>Microloans and digital banking app concept with market analysis, prototype screens and a business plan.</p>
+          <p class="m">1st place · CEO of a five-person team</p>
+          <div class="acts"><button type="button" class="deck-link">View the pitch deck →</button><button type="button" data-goto="novofin">Details</button></div>
+        </article>
       </div>
       <p class="acc-label">More work, by area</p>
       <div class="acc">
@@ -401,7 +430,7 @@
           <summary><svg class="ico" viewBox="0 0 44 36" aria-hidden="true"><rect x="13" y="3" width="18" height="30" rx="3"/><path d="M19 7h6"/><path d="M17 24l4-5 3 3 4-6"/><circle class="dot" cx="22" cy="29" r="1.3"/></svg><div><h3>Apps, prototypes &amp; pitches</h3><p>Award-winning app prototypes and product pitches, from idea to working demo.</p></div><span class="pm"></span></summary>
           <div class="inner">
             <div class="tools"><span>Power BI</span><span>Python</span><span>HTML / JavaScript</span><span>Excel</span><span>Storytelling</span></div>
-            <div class="proj">
+            <div class="proj" id="foodprint">
               <svg class="ico" viewBox="0 0 44 36" aria-hidden="true"><path d="M9 30C9 14 20 6 37 5c0 17-9 26-24 25z"/><path d="M9 30C16 22 22 17 30 12"/></svg>
               <p class="meta">CEU Hackathon · Organised by SDG Watch Austria · For the City of Vienna · <span class="star">Winner, Challenge 3</span></p>
               <h4>Vienna FoodPrint: app prototype &amp; policy frameworks</h4>
@@ -413,7 +442,7 @@
               </ul>
               <a class="more" href="https://fazilebrahimi1.github.io/vienna-foodprint-app/" target="_blank" rel="noopener">View the app prototype →</a>
             </div>
-            <div class="proj">
+            <div class="proj" id="novofin">
               <svg class="ico" viewBox="0 0 44 36" aria-hidden="true"><circle cx="16" cy="18" r="11"/><path d="M16 11v14M19.5 13.5h-5a2.5 2.5 0 0 0 0 5h3a2.5 2.5 0 0 1 0 5h-5.5"/><path d="M30 26l9-9M33 17h6v6"/></svg>
               <p class="meta">Jun 2024 · OTH Regensburg · Digital Finance · <span class="star">1st place</span></p>
               <h4>NovoFin: fintech app for microloans in emerging markets</h4>
@@ -650,6 +679,13 @@
     hero.addEventListener("pointerleave", () => { mouse = null; });
     new IntersectionObserver(([e]) => { const was = running; running = e.isIntersecting; if (running && !was && !still) { last = 0; requestAnimationFrame(loop); } }).observe(hero);
   })();
+
+  /* winner cards: open details / deck */
+  document.querySelectorAll("[data-goto]").forEach(b => b.addEventListener("click", () => {
+    const el = document.getElementById(b.dataset.goto), d = el.closest("details"); d.open = true;
+    setTimeout(() => el.scrollIntoView({ behavior: "smooth", block: "start" }), 50);
+  }));
+  document.querySelectorAll(".deck-link").forEach(b => b.addEventListener("click", () => opener.click()));
 
   /* config peek toggles */
   document.querySelectorAll(".peek-btn").forEach(b => b.addEventListener("click", () => {
