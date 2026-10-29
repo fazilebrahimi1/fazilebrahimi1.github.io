@@ -131,9 +131,86 @@
     .dbtn:disabled { opacity: .3; cursor: default; }
     .dclose { position: absolute; top: 14px; right: 14px; }
     .dbar { position: absolute; bottom: 20px; display: flex; align-items: center; gap: 18px; color: #fff; font-size: .9rem; }
+
+    /* ---- motion: live data hero ---- */
+    .hero { position: relative; overflow: hidden; }
+    #net { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+    .hero .wrap { position: relative; z-index: 1; }
+    .photo img { box-shadow: 0 30px 60px -40px rgba(29,26,25,.6); }
+    /* ---- motion: self-drawing line icons ---- */
+    .ico { flex: none; color: var(--wine); }
+    .ico * { fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 1.6s cubic-bezier(.6,.1,.2,1); }
+    .ico .dot { fill: currentColor; stroke: none; opacity: 0; transition: opacity .4s 1.1s; }
+    .ico.on * { stroke-dashoffset: 0; }
+    .ico.on .dot { opacity: 1; }
+    .ico *:nth-child(2) { transition-delay: .15s; } .ico *:nth-child(3) { transition-delay: .3s; } .ico *:nth-child(4) { transition-delay: .45s; } .ico *:nth-child(5) { transition-delay: .6s; }
+    #work .acc summary { grid-template-columns: 52px minmax(0, 1fr) auto; }
+    #work .acc summary .ico { width: 46px; height: 38px; }
+    .proj { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 0 16px; }
+    .proj > * { grid-column: 2; }
+    .proj > .ico { grid-column: 1; grid-row: 1 / span 3; width: 40px; height: 34px; margin-top: 2px; }
+    @media (max-width: 600px) { .proj { grid-template-columns: 1fr; } .proj > * , .proj > .ico { grid-column: 1; grid-row: auto; } .proj > .ico { margin-bottom: 6px; } }
+    .hl b { font-variant-numeric: tabular-nums; }
+    @media (prefers-reduced-motion: reduce) { .ico * { transition: none; stroke-dashoffset: 0; } .ico .dot { opacity: 1; transition: none; } }
+
+    /* keep the network off the text */
+    #net { -webkit-mask-image: linear-gradient(to right, transparent 0 46%, #000 66%); mask-image: linear-gradient(to right, transparent 0 46%, #000 66%); }
+    @media (max-width: 760px) { #net { -webkit-mask-image: linear-gradient(to bottom, #000 0 40%, transparent 56%); mask-image: linear-gradient(to bottom, #000 0 40%, transparent 56%); } }
+    /* tighter photo crop: her, not the banner */
+    .photo { overflow: hidden; border-radius: 10px; box-shadow: 0 30px 60px -40px rgba(29,26,25,.6); }
+    .photo img { transform: scale(1.32); transform-origin: 34% 46%; box-shadow: none; border-radius: 0; }
+    /* featured project */
+    .featured { background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 28px 28px 26px; margin-bottom: 28px; }
+    .featured .proj { margin-top: 0; padding-top: 0; border-top: 0; }
+    .featured .flag { display: inline-block; margin-bottom: 14px; }
+    .featured h4 { font-size: 1.7rem; }
+    .featured ul { margin-top: 8px; padding-left: 18px; } .featured li { margin-top: 6px; font-size: .98rem; } .featured li::marker { color: var(--wine); }
+    .acc-label { font-size: .8rem; color: var(--soft); margin-bottom: 6px; }
+    @media (max-width: 600px) { .featured { padding: 22px 18px; } }
+    /* phone menu: all links, scrollable */
+    @media (max-width: 720px) {
+      nav .wrap { flex-wrap: wrap; height: auto; padding-top: 12px; gap: 6px 16px; }
+      .links { width: 100%; overflow-x: auto; gap: 20px; padding-bottom: 12px; scrollbar-width: none; }
+      .links::-webkit-scrollbar { display: none; }
+      .links a:not(:last-child):not(:nth-child(2)) { display: inline; }
+      .links a { white-space: nowrap; }
+    }
+
+    /* softer mask: graph visible but quiet behind the text */
+    #net { -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,.22) 0 40%, #000 64%); mask-image: linear-gradient(to right, rgba(0,0,0,.22) 0 40%, #000 64%); }
+    @media (max-width: 760px) { #net { -webkit-mask-image: linear-gradient(to bottom, #000 0 42%, rgba(0,0,0,.15) 58%); mask-image: linear-gradient(to bottom, #000 0 42%, rgba(0,0,0,.15) 58%); } }
+    /* stat cards with tilt */
+    .hl { gap: 14px; background: none; border: 0; overflow: visible; perspective: 1000px; }
+    .hl div { border: 1px solid var(--line); border-radius: 10px; transform: perspective(1000px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform .5s cubic-bezier(.2,.8,.2,1), box-shadow .4s; will-change: transform; }
+    .hl div.tilting { transition: transform .08s linear, box-shadow .4s; box-shadow: 0 24px 40px -28px rgba(107,22,34,.45); }
+    /* config peek */
+    .proj > .peek-btn, .proj > .peek { justify-self: start; } .proj > .peek { justify-self: stretch; }
+    .peek-btn { display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; padding: 6px 11px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); font: 500 .78rem/1 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--wine); cursor: pointer; }
+    .peek-btn:hover { border-color: var(--wine); }
+    .peek-btn[aria-expanded="true"] { background: var(--wine); color: #fff; border-color: var(--wine); }
+    .peek { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .45s cubic-bezier(.2,.8,.2,1); }
+    .peek.open { grid-template-rows: 1fr; }
+    .peek > div { overflow: hidden; }
+    .peek pre { margin-top: 12px; padding: 18px 20px; border-radius: 8px; background: #1d1a19; color: #e9e2de; font: 400 .78rem/1.7 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; overflow-x: auto; }
+    .peek .cap { display: block; margin-bottom: 8px; color: #8f8783; }
+    .peek .k { color: #e4a3ad; } .peek .c { color: #8f8783; } .peek .v { color: #c9d8b6; }
+    /* scroll progress */
+    .rail { position: fixed; left: 28px; top: 50%; transform: translateY(-50%); z-index: 15; height: 46vh; width: 14px; display: none; }
+    .rail::before, .rail .fill { content: ""; position: absolute; left: 6px; top: 0; width: 2px; height: 100%; background: var(--line); border-radius: 2px; }
+    .rail .fill { background: var(--wine); height: 0; transition: height .15s linear; }
+    .rail a { position: absolute; left: 1px; width: 12px; height: 12px; margin-top: -6px; border-radius: 50%; background: var(--bg); border: 2px solid var(--line); transition: border-color .3s, background .3s, transform .3s; }
+    .rail a.on { border-color: var(--wine); background: var(--wine); }
+    .rail a.now { transform: scale(1.35); box-shadow: 0 0 0 5px rgba(107,22,34,.12); }
+    .rail a span { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); font: 500 .62rem/1 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--soft); white-space: nowrap; opacity: 0; transition: opacity .3s; pointer-events: none; }
+    .rail a:hover span, .rail a.now span { opacity: 1; }
+    @media (min-width: 1380px) { .rail { display: block; } }
+    .topbar { position: fixed; left: 0; top: 0; height: 2px; width: 0; background: var(--wine); z-index: 30; }
+    @media (min-width: 1380px) { .topbar { display: none; } }
   </style>
 </head>
 <body>
+  <div class="topbar" id="topbar"></div>
+  <div class="rail" id="rail" role="navigation" aria-label="Page progress"><span class="fill"></span></div>
   <nav>
     <div class="wrap">
       <a class="logo" href="#top">Fazile Brahimi</a>
@@ -148,6 +225,7 @@
   </nav>
 
   <header class="hero" id="top">
+    <canvas id="net" aria-hidden="true"></canvas>
     <div class="wrap">
       <div>
         <p class="label">Open to remote roles &amp; international opportunities</p>
@@ -171,16 +249,16 @@
       <div class="head">
         <div><p class="label">About</p><h2>About me</h2></div>
         <div>
-          <p>I work at Kosovo's <strong>Information Society Agency (ASHI)</strong>, on the national government <strong>Data Hub</strong>, working with metadata and government data across institutions, and on the national digital identity program. Before that, I analysed public finance reforms at the Ministry of Finance.</p>
+          <p>I work at Kosovo's <strong>Information Society Agency (ASHI)</strong>, on the national government <strong>Data Hub</strong>, working with metadata and government data across institutions, and on the national digital identity program. Before that, I drafted public finance strategy documents at the Ministry of Finance.</p>
           <p>I hold an <strong>MSc in Business Analytics (Merit)</strong> from Central European University in Vienna. My capstone was an end-to-end payment-failure prediction system for a European public transport operator, from a leakage-safe feature pipeline to a real-time and batch decision framework. It was graded A.</p>
           <p>I'm looking for remote data science and data engineering work, especially where data meets public services.</p>
         </div>
       </div>
       <div class="hl">
-        <div><b>0.797</b><span>AUC, payment-failure model for a European transit operator</span></div>
-        <div><b>27.6%</b><span>of uncollected revenue recovered by the decision framework</span></div>
-        <div><b>1st place</b><span>Vienna FoodPrint hackathon, for the City of Vienna</span></div>
-        <div><b>1st place</b><span>NovoFin fintech pitch, OTH Regensburg</span></div>
+        <div><b data-to="0.797" data-dec="3">0.797</b><span>AUC, payment-failure model for a European transit operator</span></div>
+        <div><b data-to="27.6" data-dec="1" data-suf="%">27.6%</b><span>of uncollected revenue recovered by the decision framework</span></div>
+        <div><b data-to="390000" data-dec="0" data-suf=" t">390,000 t</b><span>potential annual reduction modelled for the City of Vienna</span></div>
+        <div><b>2× 1st place</b><span>Vienna FoodPrint hackathon and NovoFin fintech pitch</span></div>
       </div>
     </div>
   </section>
@@ -188,30 +266,10 @@
   <section class="tint" id="work">
     <div class="wrap head">
       <div><p class="label">Work</p><h2>Projects</h2><p class="note">Five areas. Tap one to see the projects.</p></div>
-      <div class="acc">
-
-        <details>
-          <summary><div><h3>Data pipelines &amp; engineering</h3><p>Turning raw data into clean, reliable inputs. ETL, feature pipelines, cloud platforms, orchestration.</p></div><span class="pm"></span></summary>
-          <div class="inner">
-            <div class="tools"><span>Python</span><span>SQL</span><span>DataHub</span><span>Metadata management</span><span>Data governance</span><span>AWS (S3, Lambda, Athena)</span><span>Snowflake</span><span>Orchestration</span><span>Git</span></div>
+      <div>
+      <div class="featured"><span class="tag flag" style="margin-left:0">Featured project</span>
             <div class="proj">
-              <p class="meta">2026 – Present · ASHI, Kosovo · <span class="star">Current work</span></p>
-              <h4>Kosovo's national government Data Hub</h4>
-              <p>Working on the government Data Hub, built on DataHub, the open-source metadata platform originally developed at LinkedIn. My focus is metadata: describing, organising, and documenting datasets from Kosovo's public institutions so they can be found, trusted, and reused.</p>
-              <ul>
-                <li>Data catalogue: dataset descriptions, ownership, and tags so data is easy to discover.</li>
-                <li>Data governance: consistent metadata standards and classification across institutions.</li>
-                <li>Understanding lineage: where government data comes from and how it is used.</li>
-              </ul>
-            </div>
-          </div>
-        </details>
-
-        <details>
-          <summary><div><h3>Machine learning &amp; predictive modelling</h3><p>Classification, gradient boosting, deep learning, and models built to fit a real business decision.</p></div><span class="pm"></span></summary>
-          <div class="inner">
-            <div class="tools"><span>XGBoost</span><span>scikit-learn</span><span>Logistic regression</span><span>Random Forest</span><span>LASSO / Elastic Net</span><span>ARIMA / SARIMA</span><span>Time series forecasting</span><span>Deep learning</span></div>
-            <div class="proj">
+              <svg class="ico" viewBox="0 0 44 36" aria-hidden="true"><path d="M4 30h36"/><path d="M7 30V22h6v8M17 30V16h6v14M27 30V9h6v21"/><path d="M5 18L36 4"/><path d="M31 4h5v5"/></svg>
               <p class="meta">Apr – Jun 2026 · MSc Capstone · Client: Rebel Solutions Group · <span class="star">Grade A</span></p>
               <h4>Uncovering and predicting revenue loss in public transport</h4>
               <p>Built a payment-failure prediction system for a European public transport operator.</p>
@@ -223,7 +281,47 @@
                 <li>Delivered a technical report, business and academic presentations, and a reproducible notebook.</li>
               </ul>
             </div>
+      </div>
+      <p class="acc-label">More work, by area</p>
+      <div class="acc">
+
+        <details>
+          <summary><svg class="ico" viewBox="0 0 44 36" aria-hidden="true"><ellipse cx="12" cy="9" rx="8" ry="3"/><path d="M4 9v16c0 1.7 3.6 3 8 3s8-1.3 8-3V9M4 17c0 1.7 3.6 3 8 3s8-1.3 8-3"/><path d="M24 18h15"/><path d="M34 13l5 5-5 5"/></svg><div><h3>Data pipelines &amp; engineering</h3><p>Turning raw data into clean, reliable inputs. ETL, feature pipelines, cloud platforms, orchestration.</p></div><span class="pm"></span></summary>
+          <div class="inner">
+            <div class="tools"><span>Python</span><span>SQL</span><span>DataHub</span><span>Metadata management</span><span>Data governance</span><span>AWS (S3, Lambda, Athena)</span><span>Snowflake</span><span>Orchestration</span><span>Git</span></div>
             <div class="proj">
+              <svg class="ico" viewBox="0 0 44 36" aria-hidden="true"><circle cx="22" cy="18" r="5"/><path d="M22 13V5M22 23v8M17 18H6M27 18h11"/><circle cx="22" cy="4" r="2"/><circle cx="22" cy="32" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="39" cy="18" r="2"/></svg>
+              <p class="meta">2026 – Present · ASHI, Kosovo · <span class="star">Current work</span></p>
+              <h4>Kosovo's national government Data Hub</h4>
+              <p>Working on the government Data Hub, built on DataHub, the open-source metadata platform originally developed at LinkedIn. My focus is metadata: describing, organising, and documenting datasets from Kosovo's public institutions so they can be found, trusted, and reused.</p>
+              <ul>
+                <li>Data catalogue: dataset descriptions, ownership, and tags so data is easy to discover.</li>
+                <li>Data governance: consistent metadata standards and classification across institutions.</li>
+                <li>Understanding lineage: where government data comes from and how it is used.</li>
+              </ul>
+              <button type="button" class="peek-btn" aria-expanded="false" aria-controls="peek-dh">&lt;/&gt; Metadata YAML</button>
+              <div class="peek" id="peek-dh"><div><pre><span class="cap"># Example metadata entry (illustrative, not real government data)</span><span class="k">dataset</span>: <span class="v">business_registry.registered_businesses</span>
+<span class="k">description</span>: <span class="v">Registered businesses by municipality and sector, updated monthly</span>
+<span class="k">owner</span>:
+  <span class="k">institution</span>: <span class="v">Example Agency</span>
+  <span class="k">steward</span>: <span class="v">data team</span>
+<span class="k">tags</span>: <span class="v">[economy, open-data]</span>
+<span class="k">glossary_terms</span>: <span class="v">[Business, Municipality]</span>
+<span class="k">classification</span>: <span class="v">public</span>
+<span class="k">update_frequency</span>: <span class="v">monthly</span>
+<span class="k">lineage</span>:
+  <span class="k">upstream</span>: <span class="v">[registry_db.business_entries]</span>
+  <span class="k">downstream</span>: <span class="v">[dashboard.business_activity]</span></pre></div></div>
+            </div>
+          </div>
+        </details>
+
+        <details>
+          <summary><svg class="ico" viewBox="0 0 44 36" aria-hidden="true"><path d="M5 3v28h35"/><path d="M5 31C9 14 19 8 40 5"/><path d="M5 31L40 5" stroke-dasharray=".04 .04"/><circle class="dot" cx="17" cy="13" r="2"/></svg><div><h3>Machine learning &amp; predictive modelling</h3><p>Classification, gradient boosting, deep learning, and models built to fit a real business decision.</p></div><span class="pm"></span></summary>
+          <div class="inner">
+            <div class="tools"><span>XGBoost</span><span>scikit-learn</span><span>Logistic regression</span><span>Random Forest</span><span>LASSO / Elastic Net</span><span>ARIMA / SARIMA</span><span>Time series forecasting</span><span>Deep learning</span></div>
+            <div class="proj">
+              <svg class="ico" viewBox="0 0 44 36" aria-hidden="true"><path d="M4 31h36"/><path d="M4 24l5-6 5 4 5-9 5 5"/><path d="M24 18l5-3 5 2 6-6" stroke-dasharray=".05 .04"/></svg>
               <p class="meta">MSc · Time Series Forecasting</p>
               <h4>Rossmann store sales forecasting</h4>
               <p>Forecast weekly sales for a Rossmann drugstore using real retail data (Kaggle, 2013–2015), comparing SARIMA, ARIMA, and XGBoost with lag and promotion features.</p>
@@ -234,6 +332,7 @@
               <a class="more" href="https://github.com/fazilebrahimi1/rossmann-sales-forecasting" target="_blank" rel="noopener">View on GitHub →</a>
             </div>
             <div class="proj">
+              <svg class="ico" viewBox="0 0 44 36" aria-hidden="true"><path d="M4 3v28h36"/><path d="M8 27L38 6"/><circle class="dot" cx="11" cy="21" r="1.6"/><circle class="dot" cx="16" cy="23" r="1.6"/><circle class="dot" cx="20" cy="15" r="1.6"/><circle class="dot" cx="27" cy="16" r="1.6"/><circle class="dot" cx="33" cy="9" r="1.6"/></svg>
               <p class="meta">MSc · Prediction &amp; Machine Learning</p>
               <h4>Airbnb price prediction: Berlin and Geneva</h4>
               <p>Built and compared models to predict Airbnb listing prices in Berlin using Inside Airbnb data: OLS, LASSO, Elastic Net, Random Forest, and Gradient Boosting, evaluated on out-of-sample RMSE and R². Tested how well the models hold up over time, on later Berlin data, and in a different market, on Geneva listings.</p>
@@ -243,10 +342,11 @@
         </details>
 
         <details>
-          <summary><div><h3>AI agents &amp; LLM applications</h3><p>Building AI agents on top of large language models that can plan and complete tasks for users.</p></div><span class="pm"></span></summary>
+          <summary><svg class="ico" viewBox="0 0 44 36" aria-hidden="true"><path d="M22 8L9 27M22 8l13 19M9 27h26"/><circle cx="22" cy="7" r="4"/><circle cx="9" cy="28" r="4"/><circle cx="35" cy="28" r="4"/></svg><div><h3>AI agents &amp; LLM applications</h3><p>Building AI agents on top of large language models that can plan and complete tasks for users.</p></div><span class="pm"></span></summary>
           <div class="inner">
             <div class="tools"><span>OpenAI Agents SDK</span><span>LiteLLM</span><span>RAG / ChromaDB</span><span>Tool calling</span><span>Guardrails</span><span>Chainlit</span></div>
             <div class="proj">
+              <svg class="ico" viewBox="0 0 44 36" aria-hidden="true"><path d="M5 6h24a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H14l-6 5v-5H5a3 3 0 0 1-3-3V9a3 3 0 0 1 3-3z"/><path d="M9 13h14M9 17h9"/><path d="M36 14l4 4-4 4"/></svg>
               <p class="meta">2026 · CEU AI Engineering hackathon</p>
               <h4>AI travel agent: multi-agent trip planner</h4>
               <p>A trip planner built with the OpenAI Agents SDK, where a planner agent delegates to two specialist agents. It started as a team project at the CEU AI Engineering hackathon, and I then rebuilt and extended it as my own standalone version.</p>
@@ -257,22 +357,39 @@
                 <li>Runs on any model through LiteLLM (Gemini, OpenAI, Claude, Bedrock), with a Chainlit chat interface.</li>
                 <li>Packaged in a dev container, tested automatically with GitHub Actions on every push, and set up for one-click deployment on Render.</li>
               </ul>
-              <a class="more" href="https://github.com/fazilebrahimi1/ai-travel-agent" target="_blank" rel="noopener">View on GitHub →</a>
+                            <button type="button" class="peek-btn" aria-expanded="false" aria-controls="peek-ta">&lt;/&gt; Agent config</button>
+              <div class="peek" id="peek-ta"><div><pre><span class="cap"># How the agents connect (summary of the setup)</span><span class="k">model</span>: <span class="v">litellm/gemini/gemini-2.5-flash</span>   <span class="c"># swap in .env: OpenAI, Claude, Bedrock</span>
+<span class="k">guardrail</span>: <span class="v">travel-topic input classifier</span>
+<span class="k">trip_planner</span>:
+  <span class="k">memory</span>: <span class="v">SQLite session per chat</span>
+  <span class="k">tools</span>:
+    - <span class="v">destination_expert</span>   <span class="c"># agent as tool</span>
+    - <span class="v">logistics_agent</span>      <span class="c"># agent as tool</span>
+<span class="k">destination_expert</span>:
+  <span class="k">rag</span>: <span class="v">ChromaDB, 25-destination guide</span>
+<span class="k">logistics_agent</span>:
+  <span class="k">tools</span>: <span class="v">[open_meteo_weather, frankfurter_currency]</span>
+<span class="k">ui</span>: <span class="v">Chainlit</span>
+<span class="k">tests</span>: <span class="v">pytest, offline, GitHub Actions on every push</span>
+<span class="k">deploy</span>: <span class="v">render.yaml</span></pre></div></div>
+              <br><a class="more" href="https://github.com/fazilebrahimi1/ai-travel-agent" target="_blank" rel="noopener">View on GitHub →</a>
             </div>
           </div>
         </details>
 
         <details>
-          <summary><div><h3>Analytics, econometrics &amp; reports</h3><p>Regression, causal analysis, and survey data, written up as clear reports for decision-makers.</p></div><span class="pm"></span></summary>
+          <summary><svg class="ico" viewBox="0 0 44 36" aria-hidden="true"><path d="M5 31h35"/><path d="M10 31V21M17 31V15M24 31V19M31 31V10"/><path d="M7 20l9-7 8 4 12-11"/><circle class="dot" cx="36" cy="6" r="2"/></svg><div><h3>Analytics, econometrics &amp; reports</h3><p>Regression, causal analysis, and survey data, written up as clear reports for decision-makers.</p></div><span class="pm"></span></summary>
           <div class="inner">
             <div class="tools"><span>Python (statsmodels, linearmodels)</span><span>R</span><span>Stata</span><span>Panel data</span><span>Causal inference</span></div>
             <div class="proj">
+              <svg class="ico" viewBox="0 0 44 36" aria-hidden="true"><path d="M22 30a3 3 0 1 0 0-.1"/><path d="M14 22a11 11 0 0 1 16 0M9 16a18 18 0 0 1 26 0M4 10a25 25 0 0 1 36 0"/></svg>
               <p class="meta">MSc · Causal Analysis · Term project</p>
               <h4>Does higher internet penetration cause lower unemployment?</h4>
               <p>Tested whether expanding internet access reduces unemployment across countries, using World Bank panel data and regressions with country and year fixed effects. The average effect was not statistically significant, but splitting by income level showed the effect is about four times stronger in high-income countries, suggesting the benefits of internet access depend on a country's institutions.</p>
               <a class="more" href="https://github.com/fazilebrahimi1/Term_Project" target="_blank" rel="noopener">View on GitHub →</a>
             </div>
             <div class="proj">
+              <svg class="ico" viewBox="0 0 44 36" aria-hidden="true"><path d="M4 31h36"/><path d="M4 28C16 28 16 6 40 6"/><path d="M22 3v28" stroke-dasharray=".05 .04"/></svg>
               <p class="meta">2025 · BSc Thesis</p>
               <h4>Determinants of trust in government</h4>
               <p>Analysed 1,683 survey respondents across Balkan countries with a probit model in Stata, testing 17 socio-demographic, economic, and political variables. Transparency, local authorities, and rule of law were the strongest significant predictors.</p>
@@ -281,10 +398,11 @@
         </details>
 
         <details>
-          <summary><div><h3>Apps, prototypes &amp; pitches</h3><p>Award-winning app prototypes and product pitches, from idea to working demo.</p></div><span class="pm"></span></summary>
+          <summary><svg class="ico" viewBox="0 0 44 36" aria-hidden="true"><rect x="13" y="3" width="18" height="30" rx="3"/><path d="M19 7h6"/><path d="M17 24l4-5 3 3 4-6"/><circle class="dot" cx="22" cy="29" r="1.3"/></svg><div><h3>Apps, prototypes &amp; pitches</h3><p>Award-winning app prototypes and product pitches, from idea to working demo.</p></div><span class="pm"></span></summary>
           <div class="inner">
             <div class="tools"><span>Power BI</span><span>Python</span><span>HTML / JavaScript</span><span>Excel</span><span>Storytelling</span></div>
             <div class="proj">
+              <svg class="ico" viewBox="0 0 44 36" aria-hidden="true"><path d="M9 30C9 14 20 6 37 5c0 17-9 26-24 25z"/><path d="M9 30C16 22 22 17 30 12"/></svg>
               <p class="meta">CEU Hackathon · Organised by SDG Watch Austria · For the City of Vienna · <span class="star">Winner, Challenge 3</span></p>
               <h4>Vienna FoodPrint: app prototype &amp; policy frameworks</h4>
               <p>In a team of three, we worked on a challenge for the Municipality of Vienna: cutting the city's material footprint from 14t toward the EU target of 7t per capita through the food system.</p>
@@ -296,6 +414,7 @@
               <a class="more" href="https://fazilebrahimi1.github.io/vienna-foodprint-app/" target="_blank" rel="noopener">View the app prototype →</a>
             </div>
             <div class="proj">
+              <svg class="ico" viewBox="0 0 44 36" aria-hidden="true"><circle cx="16" cy="18" r="11"/><path d="M16 11v14M19.5 13.5h-5a2.5 2.5 0 0 0 0 5h3a2.5 2.5 0 0 1 0 5h-5.5"/><path d="M30 26l9-9M33 17h6v6"/></svg>
               <p class="meta">Jun 2024 · OTH Regensburg · Digital Finance · <span class="star">1st place</span></p>
               <h4>NovoFin: fintech app for microloans in emerging markets</h4>
               <p>As CEO of a five-person team, I led the concept and pitch for NovoFin, a mobile app offering microloans and digital banking to people underserved by traditional banks in emerging markets. Our pitch won first place in the course's pitch competition.</p>
@@ -309,6 +428,7 @@
           </div>
         </details>
 
+      </div>
       </div>
     </div>
   </section>
@@ -334,19 +454,19 @@
         </details>
         <details>
           <summary><div><span class="when">Dec 2024 – Jul 2025 · Pristina, Kosovo</span><h3>Public Finance Management Group – Secretariat</h3><p>Ministry of Finance, Labor and Transfers of Republic of Kosovo</p></div><span class="pm"></span></summary>
-          <div class="inner"><p>Drafted analytical inputs for the Public Finance Management Strategy (2022–2026); analyzed SIGMA, PEFA, and IMF assessments to support evidence-based reforms; drafted the Financial Action Plan (2025–2026); developed dashboards and Excel-based visualizations to communicate key findings.</p></div>
+          <div class="inner"><p>Drafted inputs for the Public Finance Management Strategy (2022–2026), drawing on SIGMA, PEFA, and IMF assessments; drafted the Financial Action Plan (2025–2026); developed dashboards and Excel-based visualizations to communicate key findings.</p></div>
         </details>
         <details>
           <summary><div><span class="when">Nov 2024 · Pristina, Kosovo</span><h3>Researcher — Economic Analysis</h3><p>GAP Institute for Advanced Studies</p></div><span class="pm"></span></summary>
           <div class="inner"><p>Supported quantitative analysis on public finance and economic governance topics using survey and administrative data, including regression analysis and visualisations for publications.</p></div>
         </details>
         <details>
-          <summary><div><span class="when">Aug 2023 – Mar 2024 · Remote, Germany</span><h3>Market Researcher</h3><p>Kantar Group</p></div><span class="pm"></span></summary>
-          <div class="inner"><p>Administered surveys and interviews; selected sampling methodology and checked data for inconsistencies, biases, or errors; wrote reports summarizing findings.</p></div>
-        </details>
-        <details>
-          <summary><div><span class="when">Jun 2023 – Mar 2024 · Remote, Germany</span><h3>Market Researcher</h3><p>Ipsos</p></div><span class="pm"></span></summary>
-          <div class="inner"><p>Identified market trends and consumer behaviour patterns from survey data; worked with clients to understand research needs and deliver insights; ensured data quality in collected data.</p></div>
+          <summary><div><span class="when">Jun 2023 – Mar 2024 · Remote, Germany</span><h3>Market Researcher</h3><p>Kantar Group &amp; Ipsos</p></div><span class="pm"></span></summary>
+          <div class="inner"><ul>
+            <li>Administered surveys and interviews; selected sampling methodology and checked data for inconsistencies, biases, or errors.</li>
+            <li>Identified market trends and consumer behaviour patterns from survey data, and wrote reports summarizing findings.</li>
+            <li>Worked with clients to understand research needs and deliver insights.</li>
+          </ul></div>
         </details>
         <details>
           <summary><div><span class="when">Mar 2024 – Aug 2024 · Volunteering</span><h3>HR | Team Member</h3><p>AIESEC — Economic Empowerment</p></div><span class="pm"></span></summary>
@@ -391,11 +511,9 @@
       <div><p class="label">Skills</p><h2>Skills &amp; certifications</h2></div>
       <div>
         <dl class="rows">
-          <div><dt>Data Engineering</dt><dd>ETL &amp; feature pipelines, DataHub (data catalog), metadata &amp; data governance, AWS (S3, Lambda, Athena), Snowflake, orchestration &amp; real-time processing, AI agents &amp; LLM integration</dd></div>
-          <div><dt>Machine Learning</dt><dd>Predictive modelling, gradient boosting (XGBoost), deep learning, feature engineering, time series forecasting</dd></div>
-          <div><dt>Analytics</dt><dd>Causal inference, panel &amp; regression models, geospatial analysis, data visualization, process analysis</dd></div>
-          <div><dt>Languages &amp; Tools</dt><dd>Python, SQL, R, Stata, Power BI, Git</dd></div>
-          <div><dt>Ways of Working</dt><dd>Scrum (PSM I), remote collaboration, stakeholder reporting</dd></div>
+          <div><dt>Data engineering</dt><dd>SQL, ETL &amp; feature pipelines, DataHub, metadata &amp; data governance, AWS, Snowflake</dd></div>
+          <div><dt>Modelling</dt><dd>XGBoost, scikit-learn, time series forecasting, causal inference, deep learning, LLM agents</dd></div>
+          <div><dt>Tools &amp; ways of working</dt><dd>Python, R, Stata, Power BI, Git · Scrum (PSM I)</dd></div>
           <div><dt>Languages</dt><dd>Albanian (native), English (C1), German (B2)</dd></div>
         </dl>
         <h3 class="sub">Certifications</h3>
@@ -404,11 +522,6 @@
           <li><span>ERP Business Solutions/SAP — World Bank and the Ministry of Economy</span><span>2024</span></li>
           <li><span>Advanced Google Analytics — Google</span><span>2024</span></li>
           <li><span>Econometrics and R Programming — CERGE-EI Foundation</span><span>2024</span></li>
-          <li><span>Business Analysis and Process Management — Coursera</span><span>2024</span></li>
-          <li><span>AI and Human Rights — European Commission</span><span>2024</span></li>
-          <li><span>International Business — University of Iowa Tippie College of Business</span><span>2024</span></li>
-          <li><span>Certificate of Intercultural Exchange in Education — DAAD</span><span>2024</span></li>
-          <li><span>Labor Economics — CERGE-EI</span><span>2023</span></li>
         </ul>
       </div>
     </div>
@@ -450,6 +563,123 @@
   let x0 = null;
   img.addEventListener("touchstart", e => { x0 = e.touches[0].clientX; }, { passive: true });
   img.addEventListener("touchend", e => { if (x0 === null) return; const dx = e.changedTouches[0].clientX - x0; if (dx < -40) next.click(); if (dx > 40) prev.click(); x0 = null; });
+
+  /* self-drawing icons */
+  document.querySelectorAll(".ico *").forEach(el => { if (!el.classList.contains("dot")) el.setAttribute("pathLength", "1"); });
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("on"); io.unobserve(e.target); } }), { threshold: .5 });
+  document.querySelectorAll(".ico").forEach(el => io.observe(el));
+
+  /* numbers count up */
+  const fmt = (v, d) => v.toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d });
+  const cio = new IntersectionObserver(es => es.forEach(e => {
+    if (!e.isIntersecting) return; cio.unobserve(e.target);
+    e.target.querySelectorAll("b[data-to]").forEach((b, k) => {
+      const to = +b.dataset.to, d = +b.dataset.dec, suf = b.dataset.suf || "", t0 = performance.now() + k * 120, D = 1600;
+      const step = now => { const p = Math.min(1, Math.max(0, (now - t0) / D)), q = 1 - Math.pow(1 - p, 3); b.textContent = fmt(to * q, d) + suf; if (p < 1) requestAnimationFrame(step); };
+      requestAnimationFrame(step);
+    });
+  }), { threshold: .4 });
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.querySelectorAll(".hl").forEach(el => cio.observe(el));
+
+  /* live data graph behind the hero: clustered nodes, flowing packets, cursor pull */
+  (() => {
+    const cv = document.getElementById("net"), hero = cv.parentElement, ctx = cv.getContext("2d");
+    const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let W, H, dpr, hubs = [], nodes = [], packets = [], mouse = null, running = true, last = 0;
+    const rnd = (a, b) => a + Math.random() * (b - a);
+    function build() {
+      dpr = Math.min(2, devicePixelRatio || 1); W = hero.clientWidth; H = hero.clientHeight;
+      cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const mobile = W < 760, nh = mobile ? 4 : 6;
+      hubs = Array.from({ length: nh }, (_, i) => ({
+        x: mobile ? rnd(.1, .9) * W : rnd(.5, .97) * W, y: mobile ? rnd(.06, .45) * H : rnd(.1, .9) * H,
+        vx: 0, vy: 0, hub: true, r: 3.6, ph: Math.random() * 6.28 }));
+      if (!mobile) hubs.push({ x: .2 * W, y: .2 * H, vx: 0, vy: 0, hub: true, r: 3, ph: 0 });
+      nodes = [];
+      const per = mobile ? 6 : 9;
+      hubs.forEach((h, hi) => { for (let k = 0; k < per; k++) { const a = rnd(0, 6.28), L = rnd(36, 96);
+        nodes.push({ x: h.x + Math.cos(a) * L, y: h.y + Math.sin(a) * L, vx: 0, vy: 0, h: hi, L, r: rnd(1.3, 2.1) }); } });
+      // hub-to-hub links: a lineage chain
+      links = []; const order = hubs.map((h, i) => i).sort((a, b) => hubs[a].x - hubs[b].x);
+      for (let i = 0; i < order.length - 1; i++) links.push([order[i], order[i + 1]]);
+      if (hubs.length > 3) links.push([order[0], order[2]]);
+      packets = [];
+    }
+    let links = [];
+    function step(dt) {
+      const all = hubs.concat(nodes);
+      for (const h of hubs) { h.ph += dt * .0004; h.vx += Math.cos(h.ph) * .004; h.vy += Math.sin(h.ph * 1.3) * .004; }
+      for (const n of nodes) { // spring to hub
+        const h = hubs[n.h], dx = n.x - h.x, dy = n.y - h.y, d = Math.hypot(dx, dy) || 1, f = (d - n.L) * .0009;
+        n.vx -= dx / d * f * dt; n.vy -= dy / d * f * dt;
+        n.vx += (Math.random() - .5) * .006; n.vy += (Math.random() - .5) * .006;
+      }
+      for (let i = 0; i < all.length; i++) for (let j = i + 1; j < all.length; j++) { // repulsion
+        const a = all[i], b = all[j], dx = a.x - b.x, dy = a.y - b.y, d2 = dx * dx + dy * dy;
+        if (d2 < 900 && d2 > .01) { const d = Math.sqrt(d2), f = (30 - d) * .002; a.vx += dx / d * f; a.vy += dy / d * f; b.vx -= dx / d * f; b.vy -= dy / d * f; }
+      }
+      if (mouse) for (const n of all) { const dx = mouse.x - n.x, dy = mouse.y - n.y, d = Math.hypot(dx, dy);
+        if (d < 220 && d > 1) { const f = (1 - d / 220) * (n.hub ? .012 : .05); n.vx += dx / d * f * dt * .06; n.vy += dy / d * f * dt * .06; } }
+      for (const n of all) { n.vx *= .92; n.vy *= .92; n.x += n.vx; n.y += n.vy;
+        n.x = Math.max(4, Math.min(W - 4, n.x)); n.y = Math.max(4, Math.min(H - 4, n.y)); }
+      // packets: along spokes (node -> hub) and along the lineage chain
+      if (Math.random() < .09) { const n = nodes[(Math.random() * nodes.length) | 0]; packets.push({ a: n, b: hubs[n.h], t: 0, s: rnd(.0007, .0012) }); }
+      if (Math.random() < .03) { const l = links[(Math.random() * links.length) | 0]; packets.push({ a: hubs[l[0]], b: hubs[l[1]], t: 0, s: rnd(.0003, .0005), big: true }); }
+      for (const p of packets) p.t += p.s * dt;
+      packets = packets.filter(p => p.t < 1);
+    }
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      ctx.lineWidth = 1;
+      for (const [i, j] of links) { const a = hubs[i], b = hubs[j]; ctx.strokeStyle = "rgba(107,22,34,.16)"; ctx.setLineDash([3, 5]); ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }
+      ctx.setLineDash([]);
+      for (const n of nodes) { const h = hubs[n.h]; ctx.strokeStyle = "rgba(107,22,34,.2)"; ctx.beginPath(); ctx.moveTo(n.x, n.y); ctx.lineTo(h.x, h.y); ctx.stroke(); }
+      if (mouse) for (const n of hubs.concat(nodes)) { const d = Math.hypot(mouse.x - n.x, mouse.y - n.y); if (d < 150) { ctx.strokeStyle = `rgba(107,22,34,${(1 - d / 150) * .35})`; ctx.beginPath(); ctx.moveTo(mouse.x, mouse.y); ctx.lineTo(n.x, n.y); ctx.stroke(); } }
+      for (const p of packets) { const x = p.a.x + (p.b.x - p.a.x) * p.t, y = p.a.y + (p.b.y - p.a.y) * p.t, r = p.big ? 3.2 : 2.1;
+        const g = ctx.createRadialGradient(x, y, 0, x, y, r * 4); g.addColorStop(0, "rgba(176,52,70,.55)"); g.addColorStop(1, "rgba(176,52,70,0)");
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r * 4, 0, 6.283); ctx.fill();
+        ctx.fillStyle = "rgba(107,22,34,.9)"; ctx.beginPath(); ctx.arc(x, y, r * .7, 0, 6.283); ctx.fill(); }
+      for (const n of nodes) { ctx.fillStyle = "rgba(107,22,34,.45)"; ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, 6.283); ctx.fill(); }
+      for (const h of hubs) { ctx.fillStyle = "#fff"; ctx.strokeStyle = "rgba(107,22,34,.75)"; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.arc(h.x, h.y, h.r + 1.5, 0, 6.283); ctx.fill(); ctx.stroke(); ctx.lineWidth = 1; }
+    }
+    function loop(t) { const dt = Math.min(48, t - (last || t)); last = t; step(dt); draw(); if (running) requestAnimationFrame(loop); }
+    build();
+    if (still) { for (let k = 0; k < 200; k++) step(16); draw(); } else requestAnimationFrame(loop);
+    let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { build(); if (still) { for (let k = 0; k < 200; k++) step(16); draw(); } }, 150); });
+    hero.addEventListener("pointermove", e => { const r = hero.getBoundingClientRect(); mouse = { x: e.clientX - r.left, y: e.clientY - r.top }; });
+    hero.addEventListener("pointerleave", () => { mouse = null; });
+    new IntersectionObserver(([e]) => { const was = running; running = e.isIntersecting; if (running && !was && !still) { last = 0; requestAnimationFrame(loop); } }).observe(hero);
+  })();
+
+  /* config peek toggles */
+  document.querySelectorAll(".peek-btn").forEach(b => b.addEventListener("click", () => {
+    const p = document.getElementById(b.getAttribute("aria-controls")), on = b.getAttribute("aria-expanded") !== "true";
+    b.setAttribute("aria-expanded", on); p.classList.toggle("open", on);
+  }));
+
+  /* tilt on stat cards (mouse only) */
+  if (matchMedia("(hover: hover) and (pointer: fine)").matches && !matchMedia("(prefers-reduced-motion: reduce)").matches)
+    document.querySelectorAll(".hl div").forEach(c => {
+      c.addEventListener("pointermove", e => { const r = c.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+        c.classList.add("tilting"); c.style.setProperty("--ry", (x * 14).toFixed(2) + "deg"); c.style.setProperty("--rx", (-y * 14).toFixed(2) + "deg"); });
+      c.addEventListener("pointerleave", () => { c.classList.remove("tilting"); c.style.setProperty("--rx", "0deg"); c.style.setProperty("--ry", "0deg"); });
+    });
+
+  /* scroll progress: side rail on wide screens, thin top bar elsewhere */
+  (() => {
+    const rail = document.getElementById("rail"), fill = rail.querySelector(".fill"), bar = document.getElementById("topbar");
+    const secs = [["about", "About"], ["work", "Projects"], ["experience", "Experience"], ["education", "Education"], ["skills", "Skills"], ["contact", "Contact"]].map(([id, label]) => ({ el: document.getElementById(id), label }));
+    const dots = secs.map((s, i) => { const a = document.createElement("a"); a.href = "#" + s.el.id; a.innerHTML = "<span>" + s.label + "</span>"; a.setAttribute("aria-label", s.label); rail.appendChild(a); return a; });
+    function update() {
+      const max = document.documentElement.scrollHeight - innerHeight, p = max > 0 ? scrollY / max : 0;
+      bar.style.width = (p * 100) + "%"; fill.style.height = (p * 100) + "%";
+      let cur = -1;
+      secs.forEach((s, i) => { const top = s.el.offsetTop, pos = max > 0 ? Math.min(1, top / max) : 0; dots[i].style.top = (pos * 100) + "%";
+        const on = scrollY + innerHeight * .4 >= top; dots[i].classList.toggle("on", on); if (on) cur = i; });
+      dots.forEach((d, i) => d.classList.toggle("now", i === cur));
+    }
+    addEventListener("scroll", update, { passive: true }); addEventListener("resize", update); update();
+  })();
   </script>
 </body>
 </html>
