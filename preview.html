@@ -176,9 +176,42 @@
       .links a:not(:last-child):not(:nth-child(2)) { display: inline; }
       .links a { white-space: nowrap; }
     }
+
+    /* softer mask: graph visible but quiet behind the text */
+    #net { -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,.22) 0 40%, #000 64%); mask-image: linear-gradient(to right, rgba(0,0,0,.22) 0 40%, #000 64%); }
+    @media (max-width: 760px) { #net { -webkit-mask-image: linear-gradient(to bottom, #000 0 42%, rgba(0,0,0,.15) 58%); mask-image: linear-gradient(to bottom, #000 0 42%, rgba(0,0,0,.15) 58%); } }
+    /* stat cards with tilt */
+    .hl { gap: 14px; background: none; border: 0; overflow: visible; perspective: 1000px; }
+    .hl div { border: 1px solid var(--line); border-radius: 10px; transform: perspective(1000px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform .5s cubic-bezier(.2,.8,.2,1), box-shadow .4s; will-change: transform; }
+    .hl div.tilting { transition: transform .08s linear, box-shadow .4s; box-shadow: 0 24px 40px -28px rgba(107,22,34,.45); }
+    /* config peek */
+    .proj > .peek-btn, .proj > .peek { justify-self: start; } .proj > .peek { justify-self: stretch; }
+    .peek-btn { display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; padding: 6px 11px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); font: 500 .78rem/1 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--wine); cursor: pointer; }
+    .peek-btn:hover { border-color: var(--wine); }
+    .peek-btn[aria-expanded="true"] { background: var(--wine); color: #fff; border-color: var(--wine); }
+    .peek { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .45s cubic-bezier(.2,.8,.2,1); }
+    .peek.open { grid-template-rows: 1fr; }
+    .peek > div { overflow: hidden; }
+    .peek pre { margin-top: 12px; padding: 18px 20px; border-radius: 8px; background: #1d1a19; color: #e9e2de; font: 400 .78rem/1.7 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; overflow-x: auto; }
+    .peek .cap { display: block; margin-bottom: 8px; color: #8f8783; }
+    .peek .k { color: #e4a3ad; } .peek .c { color: #8f8783; } .peek .v { color: #c9d8b6; }
+    /* scroll progress */
+    .rail { position: fixed; left: 28px; top: 50%; transform: translateY(-50%); z-index: 15; height: 46vh; width: 14px; display: none; }
+    .rail::before, .rail .fill { content: ""; position: absolute; left: 6px; top: 0; width: 2px; height: 100%; background: var(--line); border-radius: 2px; }
+    .rail .fill { background: var(--wine); height: 0; transition: height .15s linear; }
+    .rail a { position: absolute; left: 1px; width: 12px; height: 12px; margin-top: -6px; border-radius: 50%; background: var(--bg); border: 2px solid var(--line); transition: border-color .3s, background .3s, transform .3s; }
+    .rail a.on { border-color: var(--wine); background: var(--wine); }
+    .rail a.now { transform: scale(1.35); box-shadow: 0 0 0 5px rgba(107,22,34,.12); }
+    .rail a span { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); font: 500 .62rem/1 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--soft); white-space: nowrap; opacity: 0; transition: opacity .3s; pointer-events: none; }
+    .rail a:hover span, .rail a.now span { opacity: 1; }
+    @media (min-width: 1380px) { .rail { display: block; } }
+    .topbar { position: fixed; left: 0; top: 0; height: 2px; width: 0; background: var(--wine); z-index: 30; }
+    @media (min-width: 1380px) { .topbar { display: none; } }
   </style>
 </head>
 <body>
+  <div class="topbar" id="topbar"></div>
+  <div class="rail" id="rail" role="navigation" aria-label="Page progress"><span class="fill"></span></div>
   <nav>
     <div class="wrap">
       <a class="logo" href="#top">Fazile Brahimi</a>
@@ -267,6 +300,19 @@
                 <li>Data governance: consistent metadata standards and classification across institutions.</li>
                 <li>Understanding lineage: where government data comes from and how it is used.</li>
               </ul>
+              <button type="button" class="peek-btn" aria-expanded="false" aria-controls="peek-dh">&lt;/&gt; Metadata YAML</button>
+              <div class="peek" id="peek-dh"><div><pre><span class="cap"># Example metadata entry (illustrative, not real government data)</span><span class="k">dataset</span>: <span class="v">business_registry.registered_businesses</span>
+<span class="k">description</span>: <span class="v">Registered businesses by municipality and sector, updated monthly</span>
+<span class="k">owner</span>:
+  <span class="k">institution</span>: <span class="v">Example Agency</span>
+  <span class="k">steward</span>: <span class="v">data team</span>
+<span class="k">tags</span>: <span class="v">[economy, open-data]</span>
+<span class="k">glossary_terms</span>: <span class="v">[Business, Municipality]</span>
+<span class="k">classification</span>: <span class="v">public</span>
+<span class="k">update_frequency</span>: <span class="v">monthly</span>
+<span class="k">lineage</span>:
+  <span class="k">upstream</span>: <span class="v">[registry_db.business_entries]</span>
+  <span class="k">downstream</span>: <span class="v">[dashboard.business_activity]</span></pre></div></div>
             </div>
           </div>
         </details>
@@ -312,7 +358,22 @@
                 <li>Runs on any model through LiteLLM (Gemini, OpenAI, Claude, Bedrock), with a Chainlit chat interface.</li>
                 <li>Packaged in a dev container, tested automatically with GitHub Actions on every push, and set up for one-click deployment on Render.</li>
               </ul>
-              <a class="more" href="https://github.com/fazilebrahimi1/ai-travel-agent" target="_blank" rel="noopener">View on GitHub →</a>
+                            <button type="button" class="peek-btn" aria-expanded="false" aria-controls="peek-ta">&lt;/&gt; Agent config</button>
+              <div class="peek" id="peek-ta"><div><pre><span class="cap"># How the agents connect (summary of the setup)</span><span class="k">model</span>: <span class="v">litellm/gemini/gemini-2.5-flash</span>   <span class="c"># swap in .env: OpenAI, Claude, Bedrock</span>
+<span class="k">guardrail</span>: <span class="v">travel-topic input classifier</span>
+<span class="k">trip_planner</span>:
+  <span class="k">memory</span>: <span class="v">SQLite session per chat</span>
+  <span class="k">tools</span>:
+    - <span class="v">destination_expert</span>   <span class="c"># agent as tool</span>
+    - <span class="v">logistics_agent</span>      <span class="c"># agent as tool</span>
+<span class="k">destination_expert</span>:
+  <span class="k">rag</span>: <span class="v">ChromaDB, 25-destination guide</span>
+<span class="k">logistics_agent</span>:
+  <span class="k">tools</span>: <span class="v">[open_meteo_weather, frankfurter_currency]</span>
+<span class="k">ui</span>: <span class="v">Chainlit</span>
+<span class="k">tests</span>: <span class="v">pytest, offline, GitHub Actions on every push</span>
+<span class="k">deploy</span>: <span class="v">render.yaml</span></pre></div></div>
+              <br><a class="more" href="https://github.com/fazilebrahimi1/ai-travel-agent" target="_blank" rel="noopener">View on GitHub →</a>
             </div>
           </div>
         </details>
@@ -521,37 +582,104 @@
   }), { threshold: .4 });
   if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.querySelectorAll(".hl").forEach(el => cio.observe(el));
 
-  /* live data network behind the hero */
+  /* live data graph behind the hero: clustered nodes, flowing packets, cursor pull */
   (() => {
     const cv = document.getElementById("net"), hero = cv.parentElement, ctx = cv.getContext("2d");
     const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let W, H, dpr, pts = [], mouse = null, running = true, raf;
-    function size() {
+    let W, H, dpr, hubs = [], nodes = [], packets = [], mouse = null, running = true, last = 0;
+    const rnd = (a, b) => a + Math.random() * (b - a);
+    function build() {
       dpr = Math.min(2, devicePixelRatio || 1); W = hero.clientWidth; H = hero.clientHeight;
       cv.width = W * dpr; cv.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      const n = Math.round(Math.min(80, Math.max(26, W * H / 15000)));
-      pts = Array.from({ length: n }, () => ({ x: Math.random() * W, y: Math.random() * H, vx: (Math.random() - .5) * .28, vy: (Math.random() - .5) * .28, r: Math.random() < .15 ? 2.6 : 1.5 }));
+      const mobile = W < 760, nh = mobile ? 4 : 6;
+      hubs = Array.from({ length: nh }, (_, i) => ({
+        x: mobile ? rnd(.1, .9) * W : rnd(.5, .97) * W, y: mobile ? rnd(.06, .45) * H : rnd(.1, .9) * H,
+        vx: 0, vy: 0, hub: true, r: 3.6, ph: Math.random() * 6.28 }));
+      if (!mobile) hubs.push({ x: .2 * W, y: .2 * H, vx: 0, vy: 0, hub: true, r: 3, ph: 0 });
+      nodes = [];
+      const per = mobile ? 6 : 9;
+      hubs.forEach((h, hi) => { for (let k = 0; k < per; k++) { const a = rnd(0, 6.28), L = rnd(36, 96);
+        nodes.push({ x: h.x + Math.cos(a) * L, y: h.y + Math.sin(a) * L, vx: 0, vy: 0, h: hi, L, r: rnd(1.3, 2.1) }); } });
+      // hub-to-hub links: a lineage chain
+      links = []; const order = hubs.map((h, i) => i).sort((a, b) => hubs[a].x - hubs[b].x);
+      for (let i = 0; i < order.length - 1; i++) links.push([order[i], order[i + 1]]);
+      if (hubs.length > 3) links.push([order[0], order[2]]);
+      packets = [];
     }
-    const R = 130;
-    function frame() {
+    let links = [];
+    function step(dt) {
+      const all = hubs.concat(nodes);
+      for (const h of hubs) { h.ph += dt * .0004; h.vx += Math.cos(h.ph) * .004; h.vy += Math.sin(h.ph * 1.3) * .004; }
+      for (const n of nodes) { // spring to hub
+        const h = hubs[n.h], dx = n.x - h.x, dy = n.y - h.y, d = Math.hypot(dx, dy) || 1, f = (d - n.L) * .0009;
+        n.vx -= dx / d * f * dt; n.vy -= dy / d * f * dt;
+        n.vx += (Math.random() - .5) * .006; n.vy += (Math.random() - .5) * .006;
+      }
+      for (let i = 0; i < all.length; i++) for (let j = i + 1; j < all.length; j++) { // repulsion
+        const a = all[i], b = all[j], dx = a.x - b.x, dy = a.y - b.y, d2 = dx * dx + dy * dy;
+        if (d2 < 900 && d2 > .01) { const d = Math.sqrt(d2), f = (30 - d) * .002; a.vx += dx / d * f; a.vy += dy / d * f; b.vx -= dx / d * f; b.vy -= dy / d * f; }
+      }
+      if (mouse) for (const n of all) { const dx = mouse.x - n.x, dy = mouse.y - n.y, d = Math.hypot(dx, dy);
+        if (d < 220 && d > 1) { const f = (1 - d / 220) * (n.hub ? .012 : .05); n.vx += dx / d * f * dt * .06; n.vy += dy / d * f * dt * .06; } }
+      for (const n of all) { n.vx *= .92; n.vy *= .92; n.x += n.vx; n.y += n.vy;
+        n.x = Math.max(4, Math.min(W - 4, n.x)); n.y = Math.max(4, Math.min(H - 4, n.y)); }
+      // packets: along spokes (node -> hub) and along the lineage chain
+      if (Math.random() < .09) { const n = nodes[(Math.random() * nodes.length) | 0]; packets.push({ a: n, b: hubs[n.h], t: 0, s: rnd(.0007, .0012) }); }
+      if (Math.random() < .03) { const l = links[(Math.random() * links.length) | 0]; packets.push({ a: hubs[l[0]], b: hubs[l[1]], t: 0, s: rnd(.0003, .0005), big: true }); }
+      for (const p of packets) p.t += p.s * dt;
+      packets = packets.filter(p => p.t < 1);
+    }
+    function draw() {
       ctx.clearRect(0, 0, W, H);
-      for (const p of pts) {
-        if (!still) { p.x += p.vx; p.y += p.vy; if (p.x < 0 || p.x > W) p.vx *= -1; if (p.y < 0 || p.y > H) p.vy *= -1; }
-        if (mouse) { const dx = mouse.x - p.x, dy = mouse.y - p.y, d = Math.hypot(dx, dy); if (d < 160) { p.x += dx * .004; p.y += dy * .004; } }
-      }
-      for (let i = 0; i < pts.length; i++) for (let j = i + 1; j < pts.length; j++) {
-        const a = pts[i], b = pts[j], d = Math.hypot(a.x - b.x, a.y - b.y);
-        if (d < R) { ctx.strokeStyle = `rgba(107,22,34,${(1 - d / R) * .22})`; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }
-      }
-      if (mouse) for (const p of pts) { const d = Math.hypot(mouse.x - p.x, mouse.y - p.y); if (d < 170) { ctx.strokeStyle = `rgba(107,22,34,${(1 - d / 170) * .4})`; ctx.beginPath(); ctx.moveTo(mouse.x, mouse.y); ctx.lineTo(p.x, p.y); ctx.stroke(); } }
-      for (const p of pts) { ctx.fillStyle = p.r > 2 ? "rgba(107,22,34,.55)" : "rgba(107,22,34,.32)"; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 6.283); ctx.fill(); }
-      if (running && !still) raf = requestAnimationFrame(frame);
+      ctx.lineWidth = 1;
+      for (const [i, j] of links) { const a = hubs[i], b = hubs[j]; ctx.strokeStyle = "rgba(107,22,34,.16)"; ctx.setLineDash([3, 5]); ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }
+      ctx.setLineDash([]);
+      for (const n of nodes) { const h = hubs[n.h]; ctx.strokeStyle = "rgba(107,22,34,.2)"; ctx.beginPath(); ctx.moveTo(n.x, n.y); ctx.lineTo(h.x, h.y); ctx.stroke(); }
+      if (mouse) for (const n of hubs.concat(nodes)) { const d = Math.hypot(mouse.x - n.x, mouse.y - n.y); if (d < 150) { ctx.strokeStyle = `rgba(107,22,34,${(1 - d / 150) * .35})`; ctx.beginPath(); ctx.moveTo(mouse.x, mouse.y); ctx.lineTo(n.x, n.y); ctx.stroke(); } }
+      for (const p of packets) { const x = p.a.x + (p.b.x - p.a.x) * p.t, y = p.a.y + (p.b.y - p.a.y) * p.t, r = p.big ? 3.2 : 2.1;
+        const g = ctx.createRadialGradient(x, y, 0, x, y, r * 4); g.addColorStop(0, "rgba(176,52,70,.55)"); g.addColorStop(1, "rgba(176,52,70,0)");
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r * 4, 0, 6.283); ctx.fill();
+        ctx.fillStyle = "rgba(107,22,34,.9)"; ctx.beginPath(); ctx.arc(x, y, r * .7, 0, 6.283); ctx.fill(); }
+      for (const n of nodes) { ctx.fillStyle = "rgba(107,22,34,.45)"; ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, 6.283); ctx.fill(); }
+      for (const h of hubs) { ctx.fillStyle = "#fff"; ctx.strokeStyle = "rgba(107,22,34,.75)"; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.arc(h.x, h.y, h.r + 1.5, 0, 6.283); ctx.fill(); ctx.stroke(); ctx.lineWidth = 1; }
     }
-    size(); frame();
-    addEventListener("resize", () => { size(); if (still) frame(); });
+    function loop(t) { const dt = Math.min(48, t - (last || t)); last = t; step(dt); draw(); if (running) requestAnimationFrame(loop); }
+    build();
+    if (still) { for (let k = 0; k < 200; k++) step(16); draw(); } else requestAnimationFrame(loop);
+    let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { build(); if (still) { for (let k = 0; k < 200; k++) step(16); draw(); } }, 150); });
     hero.addEventListener("pointermove", e => { const r = hero.getBoundingClientRect(); mouse = { x: e.clientX - r.left, y: e.clientY - r.top }; });
     hero.addEventListener("pointerleave", () => { mouse = null; });
-    new IntersectionObserver(([e]) => { const was = running; running = e.isIntersecting; if (running && !was && !still) raf = requestAnimationFrame(frame); }).observe(hero);
+    new IntersectionObserver(([e]) => { const was = running; running = e.isIntersecting; if (running && !was && !still) { last = 0; requestAnimationFrame(loop); } }).observe(hero);
+  })();
+
+  /* config peek toggles */
+  document.querySelectorAll(".peek-btn").forEach(b => b.addEventListener("click", () => {
+    const p = document.getElementById(b.getAttribute("aria-controls")), on = b.getAttribute("aria-expanded") !== "true";
+    b.setAttribute("aria-expanded", on); p.classList.toggle("open", on);
+  }));
+
+  /* tilt on stat cards (mouse only) */
+  if (matchMedia("(hover: hover) and (pointer: fine)").matches && !matchMedia("(prefers-reduced-motion: reduce)").matches)
+    document.querySelectorAll(".hl div").forEach(c => {
+      c.addEventListener("pointermove", e => { const r = c.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+        c.classList.add("tilting"); c.style.setProperty("--ry", (x * 14).toFixed(2) + "deg"); c.style.setProperty("--rx", (-y * 14).toFixed(2) + "deg"); });
+      c.addEventListener("pointerleave", () => { c.classList.remove("tilting"); c.style.setProperty("--rx", "0deg"); c.style.setProperty("--ry", "0deg"); });
+    });
+
+  /* scroll progress: side rail on wide screens, thin top bar elsewhere */
+  (() => {
+    const rail = document.getElementById("rail"), fill = rail.querySelector(".fill"), bar = document.getElementById("topbar");
+    const secs = [["about", "About"], ["work", "Projects"], ["experience", "Experience"], ["education", "Education"], ["skills", "Skills"], ["contact", "Contact"]].map(([id, label]) => ({ el: document.getElementById(id), label }));
+    const dots = secs.map((s, i) => { const a = document.createElement("a"); a.href = "#" + s.el.id; a.innerHTML = "<span>" + s.label + "</span>"; a.setAttribute("aria-label", s.label); rail.appendChild(a); return a; });
+    function update() {
+      const max = document.documentElement.scrollHeight - innerHeight, p = max > 0 ? scrollY / max : 0;
+      bar.style.width = (p * 100) + "%"; fill.style.height = (p * 100) + "%";
+      let cur = -1;
+      secs.forEach((s, i) => { const top = s.el.offsetTop, pos = max > 0 ? Math.min(1, top / max) : 0; dots[i].style.top = (pos * 100) + "%";
+        const on = scrollY + innerHeight * .4 >= top; dots[i].classList.toggle("on", on); if (on) cur = i; });
+      dots.forEach((d, i) => d.classList.toggle("now", i === cur));
+    }
+    addEventListener("scroll", update, { passive: true }); addEventListener("resize", update); update();
   })();
   </script>
 </body>
