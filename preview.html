@@ -153,6 +153,29 @@
     @media (max-width: 600px) { .proj { grid-template-columns: 1fr; } .proj > * , .proj > .ico { grid-column: 1; grid-row: auto; } .proj > .ico { margin-bottom: 6px; } }
     .hl b { font-variant-numeric: tabular-nums; }
     @media (prefers-reduced-motion: reduce) { .ico * { transition: none; stroke-dashoffset: 0; } .ico .dot { opacity: 1; transition: none; } }
+
+    /* keep the network off the text */
+    #net { -webkit-mask-image: linear-gradient(to right, transparent 0 46%, #000 66%); mask-image: linear-gradient(to right, transparent 0 46%, #000 66%); }
+    @media (max-width: 760px) { #net { -webkit-mask-image: linear-gradient(to bottom, #000 0 40%, transparent 56%); mask-image: linear-gradient(to bottom, #000 0 40%, transparent 56%); } }
+    /* tighter photo crop: her, not the banner */
+    .photo { overflow: hidden; border-radius: 10px; box-shadow: 0 30px 60px -40px rgba(29,26,25,.6); }
+    .photo img { transform: scale(1.32); transform-origin: 34% 46%; box-shadow: none; border-radius: 0; }
+    /* featured project */
+    .featured { background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 28px 28px 26px; margin-bottom: 28px; }
+    .featured .proj { margin-top: 0; padding-top: 0; border-top: 0; }
+    .featured .flag { display: inline-block; margin-bottom: 14px; }
+    .featured h4 { font-size: 1.7rem; }
+    .featured ul { margin-top: 8px; padding-left: 18px; } .featured li { margin-top: 6px; font-size: .98rem; } .featured li::marker { color: var(--wine); }
+    .acc-label { font-size: .8rem; color: var(--soft); margin-bottom: 6px; }
+    @media (max-width: 600px) { .featured { padding: 22px 18px; } }
+    /* phone menu: all links, scrollable */
+    @media (max-width: 720px) {
+      nav .wrap { flex-wrap: wrap; height: auto; padding-top: 12px; gap: 6px 16px; }
+      .links { width: 100%; overflow-x: auto; gap: 20px; padding-bottom: 12px; scrollbar-width: none; }
+      .links::-webkit-scrollbar { display: none; }
+      .links a:not(:last-child):not(:nth-child(2)) { display: inline; }
+      .links a { white-space: nowrap; }
+    }
   </style>
 </head>
 <body>
@@ -194,7 +217,7 @@
       <div class="head">
         <div><p class="label">About</p><h2>About me</h2></div>
         <div>
-          <p>I work at Kosovo's <strong>Information Society Agency (ASHI)</strong>, on the national government <strong>Data Hub</strong>, working with metadata and government data across institutions, and on the national digital identity program. Before that, I analysed public finance reforms at the Ministry of Finance.</p>
+          <p>I work at Kosovo's <strong>Information Society Agency (ASHI)</strong>, on the national government <strong>Data Hub</strong>, working with metadata and government data across institutions, and on the national digital identity program. Before that, I drafted public finance strategy documents at the Ministry of Finance.</p>
           <p>I hold an <strong>MSc in Business Analytics (Merit)</strong> from Central European University in Vienna. My capstone was an end-to-end payment-failure prediction system for a European public transport operator, from a leakage-safe feature pipeline to a real-time and batch decision framework. It was graded A.</p>
           <p>I'm looking for remote data science and data engineering work, especially where data meets public services.</p>
         </div>
@@ -211,6 +234,23 @@
   <section class="tint" id="work">
     <div class="wrap head">
       <div><p class="label">Work</p><h2>Projects</h2><p class="note">Five areas. Tap one to see the projects.</p></div>
+      <div>
+      <div class="featured"><span class="tag flag" style="margin-left:0">Featured project</span>
+            <div class="proj">
+              <svg class="ico" viewBox="0 0 44 36" aria-hidden="true"><path d="M4 30h36"/><path d="M7 30V22h6v8M17 30V16h6v14M27 30V9h6v21"/><path d="M5 18L36 4"/><path d="M31 4h5v5"/></svg>
+              <p class="meta">Apr – Jun 2026 · MSc Capstone · Client: Rebel Solutions Group · <span class="star">Grade A</span></p>
+              <h4>Uncovering and predicting revenue loss in public transport</h4>
+              <p>Built a payment-failure prediction system for a European public transport operator.</p>
+              <ul>
+                <li>Data pipeline: turned raw transaction logs into 42 features, with strict time-based controls so no future information leaked into training.</li>
+                <li>Lightweight logistic regression for real-time checks at the gate, flagging high-risk accounts without slowing passengers down.</li>
+                <li>Nightly XGBoost model (AUC 0.797) to prioritise back-office collection and denial-list queues.</li>
+                <li>Dynamic threshold matrix balancing passenger friction against financial risk, recovering 27.6% of baseline uncollected revenue.</li>
+                <li>Delivered a technical report, business and academic presentations, and a reproducible notebook.</li>
+              </ul>
+            </div>
+      </div>
+      <p class="acc-label">More work, by area</p>
       <div class="acc">
 
         <details>
@@ -235,19 +275,6 @@
           <summary><svg class="ico" viewBox="0 0 44 36" aria-hidden="true"><path d="M5 3v28h35"/><path d="M5 31C9 14 19 8 40 5"/><path d="M5 31L40 5" stroke-dasharray=".04 .04"/><circle class="dot" cx="17" cy="13" r="2"/></svg><div><h3>Machine learning &amp; predictive modelling</h3><p>Classification, gradient boosting, deep learning, and models built to fit a real business decision.</p></div><span class="pm"></span></summary>
           <div class="inner">
             <div class="tools"><span>XGBoost</span><span>scikit-learn</span><span>Logistic regression</span><span>Random Forest</span><span>LASSO / Elastic Net</span><span>ARIMA / SARIMA</span><span>Time series forecasting</span><span>Deep learning</span></div>
-            <div class="proj">
-              <svg class="ico" viewBox="0 0 44 36" aria-hidden="true"><path d="M4 30h36"/><path d="M7 30V22h6v8M17 30V16h6v14M27 30V9h6v21"/><path d="M5 18L36 4"/><path d="M31 4h5v5"/></svg>
-              <p class="meta">Apr – Jun 2026 · MSc Capstone · Client: Rebel Solutions Group · <span class="star">Grade A</span></p>
-              <h4>Uncovering and predicting revenue loss in public transport</h4>
-              <p>Built a payment-failure prediction system for a European public transport operator.</p>
-              <ul>
-                <li>Data pipeline: turned raw transaction logs into 42 features, with strict time-based controls so no future information leaked into training.</li>
-                <li>Lightweight logistic regression for real-time checks at the gate, flagging high-risk accounts without slowing passengers down.</li>
-                <li>Nightly XGBoost model (AUC 0.797) to prioritise back-office collection and denial-list queues.</li>
-                <li>Dynamic threshold matrix balancing passenger friction against financial risk, recovering 27.6% of baseline uncollected revenue.</li>
-                <li>Delivered a technical report, business and academic presentations, and a reproducible notebook.</li>
-              </ul>
-            </div>
             <div class="proj">
               <svg class="ico" viewBox="0 0 44 36" aria-hidden="true"><path d="M4 31h36"/><path d="M4 24l5-6 5 4 5-9 5 5"/><path d="M24 18l5-3 5 2 6-6" stroke-dasharray=".05 .04"/></svg>
               <p class="meta">MSc · Time Series Forecasting</p>
@@ -342,6 +369,7 @@
         </details>
 
       </div>
+      </div>
     </div>
   </section>
 
@@ -366,19 +394,19 @@
         </details>
         <details>
           <summary><div><span class="when">Dec 2024 – Jul 2025 · Pristina, Kosovo</span><h3>Public Finance Management Group – Secretariat</h3><p>Ministry of Finance, Labor and Transfers of Republic of Kosovo</p></div><span class="pm"></span></summary>
-          <div class="inner"><p>Drafted analytical inputs for the Public Finance Management Strategy (2022–2026); analyzed SIGMA, PEFA, and IMF assessments to support evidence-based reforms; drafted the Financial Action Plan (2025–2026); developed dashboards and Excel-based visualizations to communicate key findings.</p></div>
+          <div class="inner"><p>Drafted inputs for the Public Finance Management Strategy (2022–2026), drawing on SIGMA, PEFA, and IMF assessments; drafted the Financial Action Plan (2025–2026); developed dashboards and Excel-based visualizations to communicate key findings.</p></div>
         </details>
         <details>
           <summary><div><span class="when">Nov 2024 · Pristina, Kosovo</span><h3>Researcher — Economic Analysis</h3><p>GAP Institute for Advanced Studies</p></div><span class="pm"></span></summary>
           <div class="inner"><p>Supported quantitative analysis on public finance and economic governance topics using survey and administrative data, including regression analysis and visualisations for publications.</p></div>
         </details>
         <details>
-          <summary><div><span class="when">Aug 2023 – Mar 2024 · Remote, Germany</span><h3>Market Researcher</h3><p>Kantar Group</p></div><span class="pm"></span></summary>
-          <div class="inner"><p>Administered surveys and interviews; selected sampling methodology and checked data for inconsistencies, biases, or errors; wrote reports summarizing findings.</p></div>
-        </details>
-        <details>
-          <summary><div><span class="when">Jun 2023 – Mar 2024 · Remote, Germany</span><h3>Market Researcher</h3><p>Ipsos</p></div><span class="pm"></span></summary>
-          <div class="inner"><p>Identified market trends and consumer behaviour patterns from survey data; worked with clients to understand research needs and deliver insights; ensured data quality in collected data.</p></div>
+          <summary><div><span class="when">Jun 2023 – Mar 2024 · Remote, Germany</span><h3>Market Researcher</h3><p>Kantar Group &amp; Ipsos</p></div><span class="pm"></span></summary>
+          <div class="inner"><ul>
+            <li>Administered surveys and interviews; selected sampling methodology and checked data for inconsistencies, biases, or errors.</li>
+            <li>Identified market trends and consumer behaviour patterns from survey data, and wrote reports summarizing findings.</li>
+            <li>Worked with clients to understand research needs and deliver insights.</li>
+          </ul></div>
         </details>
         <details>
           <summary><div><span class="when">Mar 2024 – Aug 2024 · Volunteering</span><h3>HR | Team Member</h3><p>AIESEC — Economic Empowerment</p></div><span class="pm"></span></summary>
@@ -423,11 +451,9 @@
       <div><p class="label">Skills</p><h2>Skills &amp; certifications</h2></div>
       <div>
         <dl class="rows">
-          <div><dt>Data Engineering</dt><dd>ETL &amp; feature pipelines, DataHub (data catalog), metadata &amp; data governance, AWS (S3, Lambda, Athena), Snowflake, orchestration &amp; real-time processing, AI agents &amp; LLM integration</dd></div>
-          <div><dt>Machine Learning</dt><dd>Predictive modelling, gradient boosting (XGBoost), deep learning, feature engineering, time series forecasting</dd></div>
-          <div><dt>Analytics</dt><dd>Causal inference, panel &amp; regression models, geospatial analysis, data visualization, process analysis</dd></div>
-          <div><dt>Languages &amp; Tools</dt><dd>Python, SQL, R, Stata, Power BI, Git</dd></div>
-          <div><dt>Ways of Working</dt><dd>Scrum (PSM I), remote collaboration, stakeholder reporting</dd></div>
+          <div><dt>Data engineering</dt><dd>SQL, ETL &amp; feature pipelines, DataHub, metadata &amp; data governance, AWS, Snowflake</dd></div>
+          <div><dt>Modelling</dt><dd>XGBoost, scikit-learn, time series forecasting, causal inference, deep learning, LLM agents</dd></div>
+          <div><dt>Tools &amp; ways of working</dt><dd>Python, R, Stata, Power BI, Git · Scrum (PSM I)</dd></div>
           <div><dt>Languages</dt><dd>Albanian (native), English (C1), German (B2)</dd></div>
         </dl>
         <h3 class="sub">Certifications</h3>
@@ -436,11 +462,6 @@
           <li><span>ERP Business Solutions/SAP — World Bank and the Ministry of Economy</span><span>2024</span></li>
           <li><span>Advanced Google Analytics — Google</span><span>2024</span></li>
           <li><span>Econometrics and R Programming — CERGE-EI Foundation</span><span>2024</span></li>
-          <li><span>Business Analysis and Process Management — Coursera</span><span>2024</span></li>
-          <li><span>AI and Human Rights — European Commission</span><span>2024</span></li>
-          <li><span>International Business — University of Iowa Tippie College of Business</span><span>2024</span></li>
-          <li><span>Certificate of Intercultural Exchange in Education — DAAD</span><span>2024</span></li>
-          <li><span>Labor Economics — CERGE-EI</span><span>2023</span></li>
         </ul>
       </div>
     </div>
